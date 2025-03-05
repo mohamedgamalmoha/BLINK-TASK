@@ -19,10 +19,18 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView,
+                                   SpectacularJSONAPIView, SpectacularYAMLAPIView)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.api.urls'), name='accounts'),
+    path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/schema/yaml/', SpectacularJSONAPIView.as_view(), name='schema_yaml_view'),
+    path('api/docs/schema/json/', SpectacularYAMLAPIView.as_view(), name='schema_json_view'),
+    path('api/docs/redoc/', SpectacularRedocView.as_view(), name='redoc_docs_view'),
+    path('api/docs/swagger/', SpectacularSwaggerView.as_view(), name='swagger_docs_view'),
 ]
 
 if settings.DEBUG:
