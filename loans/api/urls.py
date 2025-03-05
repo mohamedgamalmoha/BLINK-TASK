@@ -12,7 +12,7 @@ router = routers.DefaultRouter()
 router.register(r'fund-type', LoanFundTypeViewSet, basename='fund_type')
 router.register(r'fund', LoanFundViewSet, basename='fund')
 router.register(r'type', LoanTypeViewSet, basename='type')
-router.register(r'/', LoanViewSet, basename='loan')
+router.register(r'', LoanViewSet, basename='loan')
 router.register(r'amortization-schedule', AmortizationScheduleViewSet, basename='amortization_schedule')
 
 urlpatterns = [
