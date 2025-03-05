@@ -51,6 +51,7 @@ class LoanFund(models.Model):
     )
     loan_type = models.ForeignKey(LoanFundType, on_delete=models.SET_NULL, null=True, verbose_name=_('Loan Type'))
     amount = models.DecimalField(max_digits=15, decimal_places=2, verbose_name=_('Amount'))
+    duration_months = models.PositiveIntegerField(null=True, verbose_name=_('Term Months'))
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
 
@@ -90,7 +91,7 @@ class Loan(models.Model):
         verbose_name=_('Status User')
     )
     amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('Amount'))
-    duration_months = models.IntegerField(verbose_name=_('Term Months'))
+    duration_months = models.PositiveIntegerField(verbose_name=_('Term Months'))
     start_at = models.DateField(null=True, blank=True,  verbose_name=_('Start At'))
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
