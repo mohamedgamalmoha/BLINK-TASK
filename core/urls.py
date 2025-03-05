@@ -26,6 +26,7 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView, Spe
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.api.urls'), name='accounts'),
+    path('api/', include('loans.api.urls'), name='loans'),
     path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/schema/yaml/', SpectacularJSONAPIView.as_view(), name='schema_yaml_view'),
     path('api/docs/schema/json/', SpectacularYAMLAPIView.as_view(), name='schema_json_view'),
