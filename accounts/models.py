@@ -9,7 +9,7 @@ from .managers import CustomUserManager, PersonnelUserManager, ProviderUserManag
 class User(AbstractUser):
     base_role = UserRole.LOAN_CUSTOMER
 
-    role = models.PositiveSmallIntegerField(choices=UserRole.choices)
+    role = models.PositiveSmallIntegerField(choices=UserRole.choices, verbose_name=_('Role'))
 
     REQUIRED_FIELDS = ['email', 'role']
 
