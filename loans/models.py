@@ -19,7 +19,6 @@ class BaseLoanType(models.Model):
     )
     min_duration_months = models.PositiveSmallIntegerField(verbose_name=_('Min Duration Months'))
     max_duration_months = models.PositiveIntegerField(verbose_name=_('Max Duration Months'))
-
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
 
@@ -97,8 +96,8 @@ class Loan(models.Model):
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
 
     class Meta:
-        verbose_name = _('Loan Type')
-        verbose_name_plural = _('Loan Types')
+        verbose_name = _('Loan')
+        verbose_name_plural = _('Loan')
         ordering = ('-create_at', '-update_at')
 
 
