@@ -18,3 +18,24 @@ class CustomUserManager(UserManager):
             )
 
         return super().create_superuser(username, email, password, **extra_fields)
+
+
+class PersonnelUserManager(CustomUserManager):
+
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=UserRole.LOAN_PERSONNEL)
+
+
+class ProviderUserManager(CustomUserManager):
+
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=UserRole.LOAN_PROVIDER)
+
+
+class CustomerUserManager(CustomUserManager):
+
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=UserRole.LOAN_CUSTOMER)
