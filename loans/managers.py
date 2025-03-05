@@ -1,5 +1,7 @@
 from django.db import models
 
+from loans.enums import LoanStatus
+
 
 class LoanFundManager(models.Manager):
 
@@ -14,4 +16,11 @@ class LoanManager(models.Manager):
     def get_total_loan_amount(self):
         return self.get_queryset().aggregate(
             total_loan=models.Sum('amount')
+        )
+
+    def get_user_active_loans(self, customer):
+        return self.get_queryset().filter(
+            customer=customer
+        ).exclude(
+            models.Q(status=LoanStatus.REJECTED) | models.Q(status=LoanStatus.COMPLETED)
         )
