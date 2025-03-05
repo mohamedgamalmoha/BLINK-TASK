@@ -3,7 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from accounts.models import PersonnelUser, ProviderUser, CustomerUser
-from .enums import LoanStatus
+from loans.enums import LoanStatus
+from loans.managers import LoanFundManager, LoanManager
 
 
 class BaseLoanType(models.Model):
@@ -55,6 +56,8 @@ class LoanFund(models.Model):
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
 
+    objects = LoanFundManager()
+
     class Meta:
         verbose_name = _('Loan Fund')
         verbose_name_plural = _('Loan Funds')
@@ -95,6 +98,8 @@ class Loan(models.Model):
     start_at = models.DateField(null=True, blank=True,  verbose_name=_('Start At'))
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
+
+    objects = LoanManager()
 
     class Meta:
         verbose_name = _('Loan')
