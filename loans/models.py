@@ -110,14 +110,16 @@ class Loan(models.Model):
 class AmortizationSchedule(models.Model):
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE, null=True, related_name='loans', verbose_name=_("Loan"))
 
+    payment_number = models.CharField(max_length=20, verbose_name=_("Payment Number"))
+    payment_date = models.DateField(verbose_name=_("Payment Date"))
+
     principal_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Principal Amount"))
     interest_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Interest Amount"))
     total_payment = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Total Payment"))
     remaining_balance = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Remaining Balance"))
 
+    transaction_id = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('Transaction ID'))
     is_paid = models.BooleanField(default=False, verbose_name=_('Is Paid'))
-    payment_number = models.CharField(max_length=20, verbose_name=_("Payment Number"))
-    payment_date = models.DateField(verbose_name=_("Payment Date"))
 
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
