@@ -1,7 +1,9 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_flex_fields.filter_backends import FlexFieldsFilterBackend
 
 from loans.models import LoanFundType, LoanFund, LoanType, Loan, AmortizationSchedule
 from loans.api.permissions import IsPersonnel, IsProvider, IsCustomer
@@ -44,6 +46,7 @@ class LoanViewSet(ModelViewSet):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsCustomer]
     serializer_class = LoanSerializer
+    filter_backends = [FlexFieldsFilterBackend] + api_settings.DEFAULT_FILTER_BACKENDS
 
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)
