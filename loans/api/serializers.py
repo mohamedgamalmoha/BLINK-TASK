@@ -143,6 +143,7 @@ class AmortizationPayment(serializers.ModelSerializer):
         read_only_fields = ('create_at', 'update_at')
 
     def validate(self, data):
+        # Check if there are any previous unpaid schedules
         instance = self.instance
         previous_unpaid_schedules = AmortizationSchedule.objects.get_previous_unpaid_schedules(
             loan_id=instance.loan.id,
@@ -153,6 +154,7 @@ class AmortizationPayment(serializers.ModelSerializer):
                 _(f"Cannot pay this amortization. You have an previous amortization that is not paid yet.")
             )
 
+        # Check if the current instance is already marked as paid
         if instance.is_paid is True:
             raise PermissionDenied(
                 _("You have already paid this")
