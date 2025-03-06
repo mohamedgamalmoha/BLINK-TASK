@@ -1,6 +1,5 @@
-from rest_framework import mixins
-from rest_framework.viewsets import GenericViewSet
 from rest_framework.authentication import BasicAuthentication
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from loans.models import LoanFundType, LoanFund, LoanType, Loan, AmortizationSchedule
 from loans.api.permissions import IsPersonnel, IsProvider, IsCustomer
@@ -8,59 +7,47 @@ from loans.api.serializers import (LoanFundTypeSerializer, LoanFundSerializer, L
                                    AmortizationScheduleSerializer)
 
 
-class LoanFundTypeViewSet(
-        mixins.CreateModelMixin,
-        mixins.RetrieveModelMixin,
-        mixins.ListModelMixin,
-        GenericViewSet
-    ):
+class LoanFundTypeViewSet(ModelViewSet):
     queryset = LoanFundType.objects.all()
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsPersonnel]
     serializer_class = LoanFundTypeSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(personnel=self.request.user)
 
-class LoanTypeViewSet(
-        mixins.CreateModelMixin,
-        mixins.RetrieveModelMixin,
-        mixins.ListModelMixin,
-        GenericViewSet
-    ):
+
+class LoanTypeViewSet(ModelViewSet):
     queryset = LoanType.objects.all()
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsPersonnel]
     serializer_class = LoanTypeSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(personnel=self.request.user)
 
-class LoanFundViewSet(
-        mixins.CreateModelMixin,
-        mixins.RetrieveModelMixin,
-        mixins.ListModelMixin,
-        GenericViewSet
-    ):
+
+class LoanFundViewSet(ModelViewSet):
     queryset = LoanFund.objects.all()
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsProvider]
     serializer_class = LoanFundSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(provider=self.request.user)
 
-class LoanViewSet(
-        mixins.CreateModelMixin,
-        mixins.RetrieveModelMixin,
-        mixins.ListModelMixin,
-        GenericViewSet
-    ):
+
+class LoanViewSet(ModelViewSet):
     queryset = Loan.objects.all()
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsCustomer]
     serializer_class = LoanSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user)
 
-class AmortizationScheduleViewSet(
-        mixins.RetrieveModelMixin,
-        mixins.ListModelMixin,
-        GenericViewSet
-    ):
+
+class AmortizationScheduleViewSet(ReadOnlyModelViewSet):
     queryset = AmortizationSchedule.objects.all()
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsCustomer]
