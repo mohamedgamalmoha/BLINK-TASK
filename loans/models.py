@@ -108,7 +108,13 @@ class Loan(models.Model):
 
 
 class AmortizationSchedule(models.Model):
-    loan = models.ForeignKey(Loan, on_delete=models.CASCADE, null=True, related_name='loans', verbose_name=_("Loan"))
+    loan = models.ForeignKey(
+        Loan,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='amortizations',
+        verbose_name=_("Loan")
+    )
 
     payment_number = models.CharField(max_length=20, verbose_name=_("Payment Number"))
     payment_date = models.DateField(verbose_name=_("Payment Date"))
