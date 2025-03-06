@@ -1,10 +1,12 @@
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from loans.models import LoanFundType, LoanFund, LoanType, Loan, AmortizationSchedule
 from loans.api.permissions import IsPersonnel, IsProvider, IsCustomer
 from loans.api.serializers import (LoanFundTypeSerializer, LoanFundSerializer, LoanTypeSerializer, LoanSerializer,
-                                   AmortizationScheduleSerializer)
+                                   AmortizationScheduleSerializer, AmortizationPayment)
 
 
 class LoanFundTypeViewSet(ModelViewSet):
@@ -52,3 +54,11 @@ class AmortizationScheduleViewSet(ReadOnlyModelViewSet):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsCustomer]
     serializer_class = AmortizationScheduleSerializer
+
+    @action(["POST"], detail=True, url_name='pay', url_path='pay',serializer_class=AmortizationPayment)
+    def pay(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(is_paid=True)
+        return Response(serializer.data)
