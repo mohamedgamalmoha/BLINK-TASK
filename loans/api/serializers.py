@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
+from rest_flex_fields import FlexFieldsModelSerializer
 
 from loans.enums import LoanStatus
 from loans.utils import get_current_balance
@@ -71,12 +72,15 @@ class LoanTypeSerializer(serializers.ModelSerializer):
         return data
 
 
-class LoanSerializer(serializers.ModelSerializer):
+class LoanSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = Loan
         exclude = ()
         read_only_fields = ('customer', 'status',  'create_at', 'update_at')
+        expandable_fields = {
+            'amortizations': ('loans.api.AmortizationScheduleSerializer', {'many': True})
+        }
 
     def validate(self, data):
         request = self.context['request']
