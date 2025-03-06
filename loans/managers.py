@@ -37,3 +37,10 @@ class AmortizationScheduleManager(models.Manager):
             models.Q(loan__status=self.model.LoanStatus.REJECTED) &
             models.Q(loan__status=self.model.LoanStatus.COMPLETED)
         )
+
+    def get_previous_unpaid_schedules(self, loan_id, payment_number):
+        return self.get_queryset().filter(
+            models.Q(load__id=loan_id) &
+            models.Q(payment_number__lt=payment_number) &
+            models.Q(is_paid=False)
+        )
