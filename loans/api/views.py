@@ -21,6 +21,11 @@ class LoanFundTypeViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(personnel=self.request.user)
 
+    @action(["GET"], detail=False, url_name='me', url_path='me', serializer_class=LoanFundTypeSerializer)
+    def me(self, request, *args, **kwargs):
+        self.queryset = self.queryset.filter(personnel=self.request.user)
+        return self.list(request,*args, **kwargs)
+
 
 class LoanTypeViewSet(ModelViewSet):
     queryset = LoanType.objects.all()
@@ -30,6 +35,11 @@ class LoanTypeViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(personnel=self.request.user)
+
+    @action(["GET"], detail=False, url_name='me', url_path='me', serializer_class=LoanTypeSerializer)
+    def me(self, request, *args, **kwargs):
+        self.queryset = self.queryset.filter(personnel=self.request.user)
+        return self.list(request,*args, **kwargs)
 
 
 class LoanFundViewSet(ModelViewSet):
