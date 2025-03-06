@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_flex_fields.utils import is_expanded
 from rest_flex_fields.filter_backends import FlexFieldsFilterBackend
 
 from loans.models import LoanFundType, LoanFund, LoanType, Loan, AmortizationSchedule
@@ -47,6 +48,13 @@ class LoanViewSet(ModelViewSet):
     permission_classes = [IsCustomer]
     serializer_class = LoanSerializer
     filter_backends = [FlexFieldsFilterBackend] + api_settings.DEFAULT_FILTER_BACKENDS
+    permit_list_expands = ['amortizations']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if is_expanded(self.request, 'amortizations'):
+            queryset = queryset.select_related('amortizations')
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)
