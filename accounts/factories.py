@@ -37,7 +37,7 @@ class ProviderUserFactory(UserFactory):
         model = ProviderUser
 
 
-class CustomerUserUserFactory(UserFactory):
+class CustomerUserFactory(UserFactory):
     role = UserRole.LOAN_CUSTOMER
 
     class Meta:
