@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 from accounts.models import PersonnelUser, ProviderUser, CustomerUser
 from loans.enums import LoanStatus
-from loans.managers import LoanFundManager, LoanManager
+from loans.managers import LoanFundManager, LoanManager, AmortizationScheduleManager
 
 
 class BaseLoanType(models.Model):
@@ -121,6 +121,8 @@ class AmortizationSchedule(models.Model):
 
     create_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Create At"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Update At"))
+
+    objects = AmortizationScheduleManager()
 
     class Meta:
         verbose_name = _('Amortization Schedule')

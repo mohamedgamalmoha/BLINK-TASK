@@ -22,5 +22,18 @@ class LoanManager(models.Manager):
         return self.get_queryset().filter(
             customer=customer
         ).exclude(
-            models.Q(status=LoanStatus.REJECTED) | models.Q(status=LoanStatus.COMPLETED)
+            models.Q(status=LoanStatus.REJECTED) |
+            models.Q(status=LoanStatus.COMPLETED)
+        )
+
+
+class AmortizationScheduleManager(models.Manager):
+
+    def get_unpaid_schedules(self, customer):
+        return self.get_queryset().filter(
+            models.Q(loan__customer=customer) &
+            models.Q(is_paid=False)
+        ).exclude(
+            models.Q(loan__status=self.model.LoanStatus.REJECTED) &
+            models.Q(loan__status=self.model.LoanStatus.COMPLETED)
         )
