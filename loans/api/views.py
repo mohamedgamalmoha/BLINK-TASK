@@ -48,6 +48,11 @@ class LoanFundViewSet(ModelViewSet):
     permission_classes = [IsProvider]
     serializer_class = LoanFundSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(provider=self.queryset.user)
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(provider=self.request.user)
 
@@ -62,6 +67,7 @@ class LoanViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = queryset.filter(customer=self.queryset.user)
         if is_expanded(self.request, 'amortizations'):
             queryset = queryset.select_related('amortizations')
         return queryset
@@ -75,6 +81,11 @@ class AmortizationScheduleViewSet(ReadOnlyModelViewSet):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsCustomer]
     serializer_class = AmortizationScheduleSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(loan__customer__id=self.queryset.user.id)
+        return queryset
 
     @action(["POST"], detail=True, url_name='pay', url_path='pay',serializer_class=AmortizationPayment)
     def pay(self, request, *args, **kwargs):
