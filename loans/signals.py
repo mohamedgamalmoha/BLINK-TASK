@@ -61,3 +61,27 @@ def create_amortization_schedule(sender, instance, created, **kwargs):
             remaining_balance=remaining_balance.quantize(Decimal('0.01')),
             is_paid=False
         )
+
+
+@receiver(post_save, sender=AmortizationSchedule)
+def update_loan_status_on_payment(sender, instance, created, **kwargs):
+    """
+    Signal to automatically update loan status to CLOSED when all
+    amortization schedules are marked as paid.
+    """
+    if created:
+        return  # Only handle updates, not creations
+
+    if instance.is_paid:
+        loan = instance.loan
+
+        # Check if all payments for this loan are completed
+        unpaid_schedules = AmortizationSchedule.objects.filter(
+            loan=loan,
+            is_paid=False
+        )
+
+        # If no unpaid schedules remain, mark the loan as CLOSED
+        if not unpaid_schedules.exists():
+            loan.status = LoanStatus.COMPLETED
+            loan.save()
