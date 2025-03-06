@@ -2,8 +2,8 @@ from django.db import models
 
 import factory
 
-from accounts.models import User
 from accounts.enums import UserRole
+from accounts.models import User, PersonnelUser, ProviderUser, CustomerUser
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -21,3 +21,24 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = User
+
+
+class PersonnelUserFactory(UserFactory):
+    role = UserRole.LOAN_PERSONNEL
+
+    class Meta:
+        model = PersonnelUser
+
+
+class ProviderUserFactory(UserFactory):
+    role = UserRole.LOAN_PROVIDER
+
+    class Meta:
+        model = ProviderUser
+
+
+class CustomerUserUserFactory(UserFactory):
+    role = UserRole.LOAN_CUSTOMER
+
+    class Meta:
+        model = CustomerUser
