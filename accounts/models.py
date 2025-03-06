@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
-from .enums import UserRole
-from .managers import CustomUserManager, PersonnelUserManager, ProviderUserManager, CustomerUserManager
+from accounts.enums import UserRole
+from accounts.managers import CustomUserManager, PersonnelUserManager, ProviderUserManager, CustomerUserManager
 
 
 class User(AbstractUser):
