@@ -87,7 +87,7 @@ class LoanSerializer(FlexFieldsModelSerializer):
 
         # For update operations (PUT/PATCH), only allow updates to loans with PENDING status
         if request.method in ('PUT', 'PATCH'):
-            if data['status'] != LoanStatus.PENDING:
+            if self.instance.status != LoanStatus.PENDING:
                 raise PermissionDenied(
                     _("Updates are only allowed for loans with PENDING status.")
                 )
@@ -102,7 +102,7 @@ class LoanSerializer(FlexFieldsModelSerializer):
             )
 
         # Validate loan duration is within the range specified by the loan type
-        duration = data['duration']
+        duration = data['duration_months']
         min_duration = data['loan_type'].min_duration_months
         max_duration = data['loan_type'].max_duration_months
         if not (max_duration >= duration >= min_duration):

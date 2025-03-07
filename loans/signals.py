@@ -16,7 +16,7 @@ def create_amortization_schedule(sender, instance, created, **kwargs):
     Generate amortization schedule when loan is approved
     """
     # Exit if not approved or already has amortizations
-    if instance.status != LoanStatus.APPROVED or instance.loans.exists():
+    if instance.status != LoanStatus.APPROVED or instance.amortizations.exists():
         return
 
     # Exit if no loan type associated
