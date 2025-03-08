@@ -15,6 +15,9 @@ class LoanFundTypeSerializer(serializers.ModelSerializer):
         model = LoanFundType
         exclude = ()
         read_only_fields = ('personnel', 'create_at', 'update_at')
+        expandable_fields = {
+            'personnel': ('accounts.api.serializers.UserSerializer', {'many': False})
+        }
 
     def validate(self, data):
         # Ensure max amount is greater than min amount
@@ -56,6 +59,9 @@ class LoanTypeSerializer(serializers.ModelSerializer):
         model = LoanType
         exclude = ()
         read_only_fields = ('personnel', 'create_at', 'update_at')
+        expandable_fields = {
+            'personnel': ('accounts.api.serializers.UserSerializer', {'many': False})
+        }
 
     def validate(self, data):
         # Ensure max amount is greater than min amount
@@ -79,7 +85,7 @@ class LoanSerializer(FlexFieldsModelSerializer):
         exclude = ()
         read_only_fields = ('customer', 'status',  'create_at', 'update_at')
         expandable_fields = {
-            'amortizations': ('loans.api.AmortizationScheduleSerializer', {'many': True})
+            'amortizations': ('loans.api.serializers.AmortizationScheduleSerializer', {'many': True})
         }
 
     def validate(self, data):
