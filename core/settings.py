@@ -9,13 +9,26 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+env = environ.Env(
+    DEBUG=(bool, False),
+    SECRET_KEY=(str, ''),
+    ALLOWED_HOSTS=(str, ''),
+    RDS_DB_ENGINE=(str, ''),
+    RDS_DB_NAME=(str, ''),
+    RDS_USERNAME=(str, ''),
+    RDS_PASSWORD=(str, ''),
+    RDS_HOSTNAME=(str, ''),
+    RDS_PORT=(int, 0000),
+    CORS_ALLOW_ALL_ORIGINS=(bool, True),
+    CORS_ALLOW_CREDENTIALS=(bool, True),
+)
+environ.Env.read_env()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -23,9 +36,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9tvnca%f&m9-s4zm_s(tjw-3b8hjfdn$!@_+u5h!zzn*^wnv!!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('Debug')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [env('ALLOWED_HOSTS').split(',')]
 
 
 # Application definition
@@ -82,11 +95,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env('RDS_DB_ENGINE'),
+        'NAME': env('RDS_DB_NAME'),
+        'USER': env('RDS_USERNAME'),
+        'PASSWORD': env('RDS_PASSWORD'),
+        'HOST': env('RDS_HOSTNAME'),
+        'PORT': env('RDS_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -145,7 +161,8 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = env('CORS_ALLOW_ALL_ORIGINS')
+CORS_ALLOW_CREDENTIALS = env('CORS_ALLOW_CREDENTIALS')
 CORS_ALLOW_METHODS = [
     'GET',
     'POST',
@@ -154,8 +171,6 @@ CORS_ALLOW_METHODS = [
     'DELETE',
     'OPTIONS',
 ]
-CORS_ALLOW_CREDENTIALS = True
-
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
