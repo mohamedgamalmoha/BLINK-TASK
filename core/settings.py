@@ -19,12 +19,6 @@ env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, ''),
     ALLOWED_HOSTS=(str, ''),
-    RDS_DB_ENGINE=(str, ''),
-    RDS_DB_NAME=(str, ''),
-    RDS_USERNAME=(str, ''),
-    RDS_PASSWORD=(str, ''),
-    RDS_HOSTNAME=(str, ''),
-    RDS_PORT=(int, 0000),
     CORS_ALLOW_ALL_ORIGINS=(bool, True),
     CORS_ALLOW_CREDENTIALS=(bool, True),
 )
@@ -95,15 +89,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': env('RDS_DB_ENGINE'),
-        'NAME': env('RDS_DB_NAME'),
-        'USER': env('RDS_USERNAME'),
-        'PASSWORD': env('RDS_PASSWORD'),
-        'HOST': env('RDS_HOSTNAME'),
-        'PORT': env('RDS_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
