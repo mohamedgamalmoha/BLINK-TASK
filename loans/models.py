@@ -41,6 +41,9 @@ class LoanFundType(BaseLoanType):
         verbose_name_plural = _('Loan Fund Types')
         ordering = ('-create_at', '-update_at')
 
+    def __str__(self):
+        return self.name
+
 
 class LoanFund(models.Model):
     provider = models.ForeignKey(
@@ -77,6 +80,9 @@ class LoanType(BaseLoanType):
         verbose_name = _('Loan Type')
         verbose_name_plural = _('Loan Types')
         ordering = ('-create_at', '-update_at')
+
+    def __str__(self):
+        return self.name
 
 
 class Loan(models.Model):
